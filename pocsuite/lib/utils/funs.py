@@ -23,12 +23,16 @@ def url2ip(url):
     """
     works like turning 'http://baidu.com' => '180.149.132.47'
     """
-
-    urlPrased = urlparse(url)
-    if urlPrased.port:
-        return gethostbyname(urlPrased.hostname), urlPrased.port
-    return gethostbyname(urlPrased.hostname)
-
+    ipp = urlsplit(url)
+    iport = ipp[1].split(':')
+    if len(iport) > 1:
+        return gethostbyname(iport[0]), iport[1]
+    else:
+        if 'https' == ipp[0]:
+            return gethostbyname(iport[0]),443
+        elif 'http' == ipp[0]:
+            return gethostbyname(iport[0]),80
+    return gethostbyname(iport[0]),0
 
 def writeText(fileName, content, encoding='utf8'):
     """
